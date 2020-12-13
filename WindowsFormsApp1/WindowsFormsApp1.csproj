@@ -184,6 +184,7 @@
     <Compile Include="LoadMultipleApi.Designer.cs">
       <DependentUpon>LoadMultipleApi.cs</DependentUpon>
     </Compile>
+    <Compile Include="ParseDataClass.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="ApiDemo.resx">

@@ -42,47 +42,46 @@ namespace WindowsFormsApp1
     '500 megabytes'
   ]
 }]";
-            //JArray a = JArray.Parse(json);
             JToken a = JToken.Parse(json);
-            //var data = JsonConvert.DeserializeObject<List<ParseDataClass>>(json);
-            //List<ParseDataClass> data = JsonSerializer.Deserialize<List<ParseDataClass>>(json.ToString());
-            //data.ForEach((l) => {
-            //    l.cpu.ToUpper();
-            //});
+            
+        }
+
+        private void CreateCsvBtn_Click(object sender, EventArgs e)
+        {
+            Dictionary<string, Type> columns = new Dictionary<string, Type>
+            {
+                { "S.No",typeof(int) },
+                { "Invoice Number",typeof(string)},
+                { "Order Number", typeof(string)},
+                { "Due Date",typeof(string)},
+                { "Total Due", typeof(string)},
+            };
+            CreateCsvWithGivenColumns(columns);
+        }
+        private void CreateCsvWithGivenColumns(Dictionary<string,Type> columns) {
             DataTable dt = new DataTable("MyTable");
-            DataColumn dc = new DataColumn("S.No",typeof(int));
-            dc.AutoIncrement = true;
-            dt.Columns.Add(dc);
-            DataColumn dc1 = new DataColumn("Extracted Data", typeof(string));
-            dt.Columns.Add(dc1);
-
-            DataRow newRow = dt.NewRow();
-            newRow["S.No"] = 1;
-            newRow["Extracted Data"] = "got the data";
-            dt.Rows.Add(newRow);
-
-            DataRow newRow1 = dt.NewRow();
-            newRow1["Extracted Data"] = "got the data";
-            dt.Rows.Add(newRow1);
+            foreach (KeyValuePair<string,Type> item in columns)
+            {
+                DataColumn dc = new DataColumn(item.Key, item.Value);
+                dt.Columns.Add(dc);
+            }
+            //DataRow newRow1 = dt.NewRow();
+            //newRow1["Extracted Data"] = "got the data";
+            //dt.Rows.Add(newRow1);
             StringBuilder sb = new StringBuilder();
 
             IEnumerable<string> columnNames = dt.Columns.Cast<DataColumn>().
                                               Select(column => column.ColumnName);
             sb.AppendLine(string.Join(",", columnNames));
 
-            foreach (DataRow row in dt.Rows)
-            {
-                IEnumerable<string> fields = row.ItemArray.Select(field => field.ToString());
-                sb.AppendLine(string.Join(",", fields));
-            }
+            //foreach (DataRow row in dt.Rows)
+            //{
+            //    IEnumerable<string> fields = row.ItemArray.Select(field => field.ToString());
+            //    sb.AppendLine(string.Join(",", fields));
+            //}
 
-            File.WriteAllText(@"C:\Users\Tft Bhopal\Documents\sample1.csv", sb.ToString());
-            Console.WriteLine(dt.Rows.Count);
+            File.WriteAllText(@"C:\Users\Tft Bhopal\Documents\TestingExcelActivity.csv", sb.ToString());
+            //Console.WriteLine(dt.Rows.Count);
         }
-    }
-    class ParseDataClass
-    {
-        public string cpu { get; set; }
-        public List<string> drives { get; set; }
     }
 }
